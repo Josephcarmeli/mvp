@@ -23,6 +23,17 @@ server.get("/api/users", (req, res) => {
     })
 });
 
+server.get('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+    db.query('SELECT * FROM users WHERE userid = $1', [id]
+    ).then((result) => {
+        res.json(result.rows);
+    }).catch((error) => {
+        console.log(error);
+        res.status(500).json ({ error: 'An error occurred'})
+    })
+})
+
 server.post("/api/register", (req, res) => {
     const { username, email, password} = req.body;
 
@@ -41,7 +52,7 @@ server.post("/api/register", (req, res) => {
 });
 
 server.post("/api/login", (req, res) => {
-    const { username, password} = req.body;
+    const { username, password } = req.body;
 
     db.query(`
     SELECT * FROM users WHERE username = $1 AND password = $2`,
@@ -58,6 +69,17 @@ server.post("/api/login", (req, res) => {
     })
 })
 
+server.delete('/api/delete/:id', (req, res) => {
+    const id = req.params.id;
+    db.query('DELETE FROM users WHERE userid = $1', [id]
+    ).then(() => {
+        res.status(200).json({ message: 'User deleted'});
+    }).catch((error) => {
+        console.log(error);
+        res.status(500).json({ error: 'An error occured'});
+    })
+
+})
 
 server.listen(port, () => {
     console.log(`Server is running on ${port}`);
