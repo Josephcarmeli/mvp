@@ -45,6 +45,21 @@
         <input type="submit" value="Submit" id="register-submit" />
       </form>
     </div>
-    
+
+    <div id="user-section" style="display: none;">
+      <div id="post-section">
+        <h2>Create a Post</h2>
+        <form id="post-form">
+          <label for="title">Title:</label><br>
+          <input type="text" id="title" name="title" required><br>
+
+          <label for="content">Content:</label><br>
+          <textarea id="content" name="content" required></textarea><br>
+
+          <input type="submit" value="Submit" id="post-submit">
+        </form>
+      </div>
+      <div id="submitted-post"></div>
+    </div>
   </body>
 </html>

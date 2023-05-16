@@ -81,6 +81,45 @@ server.delete('/api/delete/:id', (req, res) => {
 
 })
 
+server.post('/api/posts', (req, res) => {
+    const { UserID, Title, Content } = req.body;
+
+    console.log('UserID:', UserID);
+    console.log('Title:', Title);
+    console.log('Content:', Content);
+
+    db.query(`SELECT * FROM users WHERE userid = $1`, [UserID])
+        .then((result) => {
+            if (result.rows.length === 0) {
+                res.status(400).json({ error: 'Invalid UserID' });
+            } else {
+                const postDate = new Date();
+                db.query(
+                    `INSERT INTO posts (UserID, Title, Content, PostDate)
+                    VALUES ($1, $2, $3, $4)
+                    RETURNING *`,
+                    [UserID, Title, Content, postDate]
+                )
+                    .then((insertResult) => {
+                        const insertedPost = insertResult.rows[0];
+                        res.status(200).json({
+                            message: 'Post created',
+                            post: insertedPost,
+                        });
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        res.status(500).json({ error: 'Error occurred' });
+                    });
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({ error: 'Error occurred' });
+        });
+});
+
+
 server.listen(port, () => {
     console.log(`Server is running on ${port}`);
 });
