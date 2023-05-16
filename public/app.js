@@ -140,11 +140,14 @@ loginForm.addEventListener('submit', (e) => {
 
 postForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  let title = document.querySelector('#title').value;
-  let content = document.querySelector('#content').value;
+  let titleElement = document.querySelector('#title');
+  let contentElement = document.querySelector('#content');
+  let title = titleElement.value;
+  let content = contentElement.value;
 
   const postElement = document.createElement('div');
-  postElement.innerHTML = `<h3>${title}</h3><p>${content}</p>`;
+  postElement.className = "post";
+  postElement.innerHTML = `<h3 class = "post-title">${title}</h3><p class="post-content">${content}</p>`;
 
   submittedPostDiv.appendChild(postElement);
 
@@ -174,6 +177,8 @@ postForm.addEventListener('submit', (e) => {
     })
     .then((data) => {
       console.log('Post created successfully:', data);
+      titleElement.value = "";
+      contentElement.value = "";
     })
     .catch((error) => {
       console.error('Error:', error);
