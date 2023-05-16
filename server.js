@@ -42,12 +42,12 @@ server.post("/api/register", (req, res) => {
     VALUES($1, $2, $3, $4) RETURNING *`,
     [username, email, password, new Date()]
     ).then(result => {
-        const userID = result.rows[0].UserID;
+        const userID = result.rows[0].userid;
         res.status(200).json({ userID, message: "Registration successful"});
     })
     .catch(error => {
         console.error(error);
-        res.status(500).json({ error: "An error occurred"});
+        res.status(500).json({ error: error.message});
     })
 });
 
@@ -59,13 +59,14 @@ server.post("/api/login", (req, res) => {
     [username, password]
     ).then((result) => {
         if (result.rows.length > 0) {
-            res.status(200).json({ message: "Login successful" });
+            const userID = result.rows[0].userid;
+            res.status(200).json({ message: "Login successful", userID});
         } else {
             res.status(401).json({ error: "Invalid username or password"});
         }
     }).catch((error) => {
         console.log(error);
-        res.status(500).json({ error: "An error occured "});
+        res.status(500).json({ error: error.message});
     })
 })
 
@@ -76,7 +77,7 @@ server.delete('/api/delete/:id', (req, res) => {
         res.status(200).json({ message: 'User deleted'});
     }).catch((error) => {
         console.log(error);
-        res.status(500).json({ error: 'An error occured'});
+        res.status(500).json({ error: error.message});
     })
 
 })
@@ -87,6 +88,10 @@ server.post('/api/posts', (req, res) => {
     console.log('UserID:', UserID);
     console.log('Title:', Title);
     console.log('Content:', Content);
+    if (!UserID) {
+        res.status(400).json({ error: 'Missing UserID' });
+        return;
+    }
 
     db.query(`SELECT * FROM users WHERE userid = $1`, [UserID])
         .then((result) => {
@@ -109,13 +114,13 @@ server.post('/api/posts', (req, res) => {
                     })
                     .catch((error) => {
                         console.error(error);
-                        res.status(500).json({ error: 'Error occurred' });
+                        res.status(500).json({ error: error.message });
                     });
             }
         })
         .catch((error) => {
             console.error(error);
-            res.status(500).json({ error: 'Error occurred' });
+            res.status(500).json({ error: error.message });
         });
 });
 

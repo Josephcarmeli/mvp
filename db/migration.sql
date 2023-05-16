@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS (Users, Posts, Comments);
+DROP TABLE IF EXISTS (Users, Posts);
 
 CREATE TABLE Users (
     UserID SERIAL PRIMARY KEY,
@@ -17,12 +17,12 @@ CREATE TABLE Posts (
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
-CREATE TABLE Comments (
-    CommentID SERIAL PRIMARY KEY,
-    UserID INT,
-    PostID INT,
-    Content TEXT,
-    CommentDate TIMESTAMP NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (PostID) REFERENCES Posts(PostID)
-);
+-- CREATE TABLE Comments (
+--     CommentID SERIAL PRIMARY KEY,
+--     UserID INT,
+--     PostID INT,
+--     Content TEXT,
+--     CommentDate TIMESTAMP NOT NULL,
+--     FOREIGN KEY (UserID) REFERENCES Users(UserID),
+--     FOREIGN KEY (PostID) REFERENCES Posts(PostID)
+-- );

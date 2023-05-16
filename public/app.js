@@ -1,3 +1,5 @@
+let loggedInUserID;
+
 const home = document.querySelector('#home');
 const login = document.querySelector('#login');
 const register = document.querySelector('#register');
@@ -64,15 +66,21 @@ registerForm.addEventListener('submit', (e) => {
         })
     }).then(response => {
         if (response.ok) {
-            alert('Registration successfull');
-            window.location.href = 'user.html'
+            return response.json();
         } else {
             console.error('Registraion failed');
         }
-    }).catch(error => console.error('Error:', error));
+    }).then(data => {
+        alert('Registration successfull');
+        loggedInUserID = data.userID;
+        userSection.style.display = 'block';
+        registerSection.style.display = 'none';
+        loginSection.style.display = 'none';
+        console.log('loggedInUserID:', loggedInUserID);
+        window.location.href = '#user-section';
+    }).catch(error => console.error('Error', error));
 });
 
-let loggedInUserID;
 
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -99,6 +107,7 @@ loginForm.addEventListener('submit', (e) => {
       loggedInUserID = data.userID;
       userSection.style.display = 'block';
       loginSection.style.display = 'none';
+      console.log('loggedInUserID:', loggedInUserID);
       window.location.href = '#user-section';
     }).catch(error => console.error('Error:', error));
   });
