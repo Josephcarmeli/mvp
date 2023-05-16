@@ -21,11 +21,19 @@ const loginPassword = document.querySelector("#password");
 const userSection = document.querySelector('#user-section');
 const postForm = document.querySelector("#post-form");
 const submittedPostDiv = document.querySelector("#submitted-post");
+const logout = document.querySelector('#logout')
 
 homeSection.style.display = 'block';
 loginSection.style.display = 'none';
 registerSection.style.display = 'none';
 
+logout.addEventListener('click', (e) => {
+    e.preventDefault();
+    loggedInUserID = null;
+    homeSection.style.display = 'block';
+    userSection.style.display = 'none';
+    checkLoginState();
+})
 
 home.addEventListener('click', (e) => {
     e.preventDefault();
@@ -47,6 +55,21 @@ register.addEventListener('click', (e) => {
     loginSection.style.display = 'none';
     registerSection.style.display = 'block';
 });
+
+const checkLoginState = () => {
+    if (loggedInUserID) {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('register').style.display = 'none';
+        document.getElementById('home').style.display = 'none';
+        document.getElementById('logout').style.display = 'block';
+    } else {
+
+        document.getElementById('login').style.display = 'block';
+        document.getElementById('register').style.display = 'block';
+        document.getElementById('home').style.display = 'block';
+        document.getElementById('logout').style.display = 'none';
+    }
+}
 
 registerForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -78,6 +101,7 @@ registerForm.addEventListener('submit', (e) => {
         loginSection.style.display = 'none';
         console.log('loggedInUserID:', loggedInUserID);
         window.location.href = '#user-section';
+        checkLoginState();
     }).catch(error => console.error('Error', error));
 });
 
@@ -109,6 +133,7 @@ loginForm.addEventListener('submit', (e) => {
       loginSection.style.display = 'none';
       console.log('loggedInUserID:', loggedInUserID);
       window.location.href = '#user-section';
+      checkLoginState();
     }).catch(error => console.error('Error:', error));
   });
   
@@ -154,3 +179,8 @@ postForm.addEventListener('submit', (e) => {
       console.error('Error:', error);
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    checkLoginState();
+  });
