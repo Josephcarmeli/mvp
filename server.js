@@ -9,6 +9,9 @@ const port = 3000;
 
 const db = new pg.Pool({
     connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    },
 });
 
 server.use(express.static("public"));
