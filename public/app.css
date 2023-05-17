@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Oswald', sans-serif;
     background-image: url('https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?cs=srgb&dl=pexels-pixabay-531880.jpg&fm=jpg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -44,12 +44,12 @@ body {
     max-width: 400px;
     margin: 0 auto;
     padding: 20px;
-    background: whitesmoke;
+    background: rgb(255, 255, 255, 0.7);
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   }
   
-  /* Media query for smaller screens */
+ 
   @media (max-width: 600px) {
     #register-section,
     #login-section {
@@ -69,7 +69,7 @@ body {
     padding: 0;
   }
   
-  /* Media query for smaller screens */
+
   @media (min-width: 768px) {
     .leftcolumn {
       width: 75%;
@@ -82,7 +82,7 @@ body {
   }
   
   input[type="submit"] {
-    background-color: rgba(0, 128, 0, 0.7); /* Semi-transparent green */
+    background-color: rgba(0, 1, 0, 0.7); 
     color: white;
     padding: 10px 20px;
     border: none;
@@ -92,29 +92,29 @@ body {
   }
   
   input[type="submit"]:hover {
-    background-color: rgba(0, 100, 0, 0.7); /* Semi-transparent darker green on hover */
+    background-color: rgba(84, 85, 84, 0.7); 
   }
   
-  /* Customize input field styles */
+
   input[type="text"],
   input[type="password"],
   input[type="email"] {
     padding: 10px;
-    border: 1px solid rgba(0, 128, 0, 0.7); /* Semi-transparent green border */
+    border: 1px solid rgba(60, 109, 155, 0.7); 
     border-radius: 4px;
     box-sizing: border-box;
     width: 100%;
     margin-bottom: 10px;
-    background-color: rgba(0, 128, 0, 0.1); /* Semi-transparent green background */
-    color: white;
+    background-color: rgba(0, 128, 0, 0.1);
+    color: rgb(37, 5, 5);
   }
   
   input[type="text"]:focus,
   input[type="password"]:focus,
   input[type="email"]:focus {
     outline: none;
-    border-color: rgba(0, 128, 0, 0.7); /* Semi-transparent green border on focus */
-    box-shadow: 0 0 5px rgba(0, 128, 0, 0.7); /* Semi-transparent green box shadow on focus */
+    border-color: rgba(5, 134, 141, 0.7); 
+    box-shadow: 0 0 5px rgba(50, 128, 206, 0.7);
   }
 
   #post-section {
