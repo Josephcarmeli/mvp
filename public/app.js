@@ -145,17 +145,14 @@ postForm.addEventListener('submit', (e) => {
   let title = titleElement.value;
   let content = contentElement.value;
 
-  const postElement = document.createElement('div');
-  postElement.className = "post";
-  postElement.innerHTML = `<h3 class = "post-title">${title}</h3><p class="post-content">${content}</p>`;
+  const postElementHome = document.createElement('div');
+  postElementHome.className = "post";
+  postElementHome.innerHTML = `<h3 class = "post-title">${title}</h3><p class="post-content">${content}</p>`;
 
-  submittedPostDiv.appendChild(postElement);
+  const postElementSubmitted = postElementHome.cloneNode(true);
 
-  console.log('Submitting POST request:', {
-    UserID: loggedInUserID,
-    Title: title,
-    Content: content,
-  });
+  homeSection.appendChild(postElementHome);
+  submittedPostDiv.appendChild(postElementSubmitted);
 
   fetch('api/posts', {
     method: 'POST',

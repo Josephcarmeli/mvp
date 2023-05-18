@@ -1,6 +1,7 @@
 import express from 'express';
 import pg from 'pg';
 import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ const db = new pg.Pool({
 
 server.use(express.static("public"));
 server.use(express.json());
+const numSaltRounds = 10;
+
 
 server.get("/api/users", (req, res) => {
     db.query(`SELECT * FROM users`).then((data) => {
@@ -37,13 +40,14 @@ server.get('/api/users/:id', (req, res) => {
     })
 })
 
-server.post("/api/register", (req, res) => {
+server.post("/api/register", async (req, res) => {
     const { username, email, password} = req.body;
+    const hash = await bcrypt.hash(password, numSaltRounds);
 
     db.query(`
     INSERT INTO users (Username, Email, Password, RegistrationDate)
     VALUES($1, $2, $3, $4) RETURNING *`,
-    [username, email, password, new Date()]
+    [username, email, hash, new Date()]
     ).then(result => {
         const userID = result.rows[0].userid;
         res.status(200).json({ userID, message: "Registration successful"});
@@ -54,19 +58,27 @@ server.post("/api/register", (req, res) => {
     })
 });
 
-server.post("/api/login", (req, res) => {
+server.post("/api/login", async (req, res) => {
     const { username, password } = req.body;
 
     db.query(`
-    SELECT * FROM users WHERE username = $1 AND password = $2`,
-    [username, password]
-    ).then((result) => {
+    SELECT * FROM users WHERE username = $1`,
+    [username]
+    ).then(async (result) => {
         if (result.rows.length > 0) {
-            const userID = result.rows[0].userid;
-            res.status(200).json({ message: "Login successful", userID});
-        } else {
-            res.status(401).json({ error: "Invalid username or password"});
-        }
+            const user = result.rows[0];
+
+            const isValid = await bcrypt.compare(password, user.password);
+
+            if (isValid) {
+                const userID = user.userid;
+                res.status(200).json({ message: "Login successful", userID});
+            } else {
+                res.status(401).json({ error: "Invalid username or password"});
+            }
+            } else {
+                res.status(401).json({ error: "Invalid username or password"});
+            }
     }).catch((error) => {
         console.log(error);
         res.status(500).json({ error: error.message});
@@ -88,9 +100,6 @@ server.delete('/api/delete/:id', (req, res) => {
 server.post('/api/posts', (req, res) => {
     const { UserID, Title, Content } = req.body;
 
-    console.log('UserID:', UserID);
-    console.log('Title:', Title);
-    console.log('Content:', Content);
     if (!UserID) {
         res.status(400).json({ error: 'Missing UserID' });
         return;
